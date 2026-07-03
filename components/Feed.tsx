@@ -4,38 +4,82 @@ import {
   Share,
   Bookmark,
 } from "lucide-react";
-export default function Feed(){
+import { useEffect, useRef } from "react";
+
+
+export default function Feed({ post , isActive}: any) {
+    const user = post.users;
+    const audioRef = useRef<HTMLAudioElement>(null);
+
+
+    useEffect(() => {
+        console.log("useEffect is clicked")
+  if (!audioRef.current) return;
+
+  if (isActive) {
+    audioRef.current.currentTime = 0;
+    audioRef.current.play().catch(() => {});
+  } else {
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+  }
+}, [isActive]);
+
+const handleAudioPlay = () => {
+    console.log("handleAudioPlay called");
+    if (!audioRef.current) return;
+
+  if (audioRef.current.paused) {
+    audioRef.current.play().catch(() => {});
+  } else {
+    audioRef.current.pause();
+  }
+}
     
-    const reel = {
-        id: 1,
-        username: "codewithaman",
-        profilePic: "https://picsum.photos/80",
-        description:
-            "Building a YouTube Shorts clone with React and Tailwind 🚀 Follow for more web development content.",
-        music: "Lo-fi Coding Beats",
-        likes: 12400,
-        comments: 532,
-        shares: 89,
-        videoUrl: "dummy-video.mp4",
-        };
     return(
-        <div className=" relative w-full h-full ">
+        <div className="relative w-full h-full rounded-[20px] overflow-hidden">
             {/* content */}
             <div className="w-full  h-full">
-                <img src={reel.profilePic} alt="Profile" className="w-full h-full object-cover" />
+                <img src={post.post_url} alt="Profile" className="w-full h-full object-cover" />
             </div>
             {/* caption */}
-            <div className="absolute bottom-0 left-0 p-3 space-y-1">
-                <div className="font-semibold">
-                    {reel.username}
+            <div className="absolute bottom-0 left-0 p-3 space-y-1 w-full">
+                <div className="font-semibold flex items-center gap-2">
+                    
+                    <img
+                        src={user?.avatar_url || "/default-avatar.png"}
+                        alt={user?.username || "User"}
+                        className="h-10 w-10 rounded-full border border-white/40 object-cover"
+                    />
+                    <p>{post.users?.username}</p>
                 </div>
 
                 <div className="text-sm">
-                    {reel.description}
+                    {post.caption}
                 </div>
 
-                <div className="text-sm text-gray-300">
-                    🎵 {reel.music}
+                <div className="mt-3 w-full flex justify-between items-center gap-2 text-xs text-white/85 ">
+                    
+                    <p className="truncate">
+                        <span>♪  </span>
+                        {post.music_title
+                        ? `${post.music_artist} - ${post.music_title}`
+                        : "Original audio"}
+                    </p>
+                    <div className="relative h-12 w-12 rounded-full border border-white/30 bg-black/60 " onClick={handleAudioPlay}>
+                        <div className="h-full w-full  overflow-hidden rounded-full">
+                            <img 
+                                src={post.music_cover_url|| user?.avatar_url || "/default-avatar.png"}
+                                alt="music disc"
+                                className="h-full w-full object-cover"
+                            />
+                            {post.music_audio_url && (
+                                <audio ref={audioRef} src={post.music_audio_url} loop />
+                            )}
+                            
+                        </div> 
+                        
+                    </div>
                 </div>
             </div>
             {/* actions */}
