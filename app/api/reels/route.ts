@@ -6,7 +6,8 @@ export async function GET() {
     *,
     users (
       username,
-      avatar_url
+      avatar_url,
+      id
     ),
     likes (
       id,

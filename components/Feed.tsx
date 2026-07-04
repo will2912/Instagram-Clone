@@ -4,12 +4,31 @@ import {
   Share,
   Bookmark,
 } from "lucide-react";
-import { useEffect, useRef } from "react";
-
+import { useEffect, useRef, useState } from "react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default function Feed({ post , isActive}: any) {
     const user = post.users;
     const audioRef = useRef<HTMLAudioElement>(null);
+    const { user: currentUser } = useUser();
+
+
+
+const [dbUser, setDbUser] = useState(null);
+
+useEffect(() => {
+  if (!user) return;
+
+  async function getMe() {
+    const res = await fetch("/api/me");
+    const data = await res.json();
+    
+    setDbUser(data);
+  }
+
+  getMe();
+}, [user]);
+
 
 
     useEffect(() => {
@@ -35,6 +54,10 @@ const handleAudioPlay = () => {
     audioRef.current.pause();
   }
 }
+
+const isLiked = post.likes.some(
+  like => like.user_id === dbUser?.id
+);
     
     return(
         <div className="relative w-full h-full rounded-[20px] overflow-hidden">
@@ -88,8 +111,12 @@ const handleAudioPlay = () => {
             <div className="absolute top-80 right-0 p-2">
                 <div className="flex flex-col gap-6">
                     <div className="flex flex-col items-center">
-                        <Heart size={28} />
-                        <span className="text-sm">1.9K</span>
+                        <Heart size={28} className={
+                            isLiked
+                                ? "fill-red-500 text-red-500"
+                                : "text-white"
+                            }/>
+                        <span className="text-sm">{post.likes.length}</span>
                     </div>
 
                     <div className="flex flex-col items-center">
