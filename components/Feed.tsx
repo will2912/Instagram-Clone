@@ -11,6 +11,8 @@ export default function Feed({ post , isActive}: any) {
     const user = post.users;
     const audioRef = useRef<HTMLAudioElement>(null);
     const { user: currentUser } = useUser();
+    const [isLiked, setIsLiked] = useState(false);
+const [likesCount, setLikesCount] = useState(post.likes.length);
 
 
 
@@ -24,6 +26,7 @@ useEffect(() => {
     const data = await res.json();
     
     setDbUser(data);
+    setIsLiked(post.likes.some(like => like.user_id === data.id));
   }
 
   getMe();
@@ -55,9 +58,25 @@ const handleAudioPlay = () => {
   }
 }
 
-const isLiked = post.likes.some(
-  like => like.user_id === dbUser?.id
-);
+
+
+
+const handleLike=async()=>{
+    fetch("/api/like",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            post_id:post.id,
+            user_id:dbUser?.id
+        })
+    })
+    
+    setLikesCount(prevCount => isLiked ? prevCount - 1 : prevCount + 1);
+    setIsLiked(!isLiked);
+    
+}
     
     return(
         <div className="relative w-full h-full rounded-[20px] overflow-hidden">
@@ -111,12 +130,12 @@ const isLiked = post.likes.some(
             <div className="absolute top-80 right-0 p-2">
                 <div className="flex flex-col gap-6">
                     <div className="flex flex-col items-center">
-                        <Heart size={28} className={
+                        <Heart size={28} onClick={handleLike} className={
                             isLiked
                                 ? "fill-red-500 text-red-500"
-                                : "text-white"
+                                : ""
                             }/>
-                        <span className="text-sm">{post.likes.length}</span>
+                        <span className="text-sm">{likesCount}</span>
                     </div>
 
                     <div className="flex flex-col items-center">
