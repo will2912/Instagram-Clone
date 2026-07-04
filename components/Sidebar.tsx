@@ -1,4 +1,5 @@
 import { Button } from "@base-ui/react";
+import AuthSidebar from "./authSidebar";
 
 export default function (){
     return (
@@ -21,10 +22,8 @@ export default function (){
                 </Button>
                 
             </div>
-            <div className="w-full bg-yellow-500 hover:bg-yellow-600 mt-auto ">
-                <Button >
-                    Bottom
-                </Button>
+            <div className="w-full  mt-auto ">
+                <AuthSidebar />
             </div>
 
         </div>

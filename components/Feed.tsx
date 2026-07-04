@@ -83,6 +83,8 @@ const handleAudioPlay = () => {
                 </div>
             </div>
             {/* actions */}
+
+            
             <div className="absolute top-80 right-0 p-2">
                 <div className="flex flex-col gap-6">
                     <div className="flex flex-col items-center">
