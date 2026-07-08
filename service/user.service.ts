@@ -31,3 +31,19 @@ export async function syncUser(authUser: any) {
   console.log("new user created:", newUser);
   return newUser;
 }
+
+// services/user.service.ts
+
+
+
+export async function getUserId(auth0Id: string) {
+  const { data, error } = await supabase
+    .from("users")
+    .select("id")
+    .eq("auth0_id", auth0Id)
+    .single();
+
+  if (error) throw error;
+
+  return data.id;
+}

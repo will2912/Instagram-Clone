@@ -12,7 +12,10 @@ export async function GET() {
     likes (
       id,
       user_id
-    )
+    ),
+  comments (
+    id
+  )
   `);
 
   if (error) {
@@ -24,3 +27,4 @@ export async function GET() {
 
   return Response.json(data)
 }
+

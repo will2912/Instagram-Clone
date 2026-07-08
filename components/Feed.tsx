@@ -7,16 +7,21 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
-export default function Feed({ post , isActive}: any) {
+export default function Feed({ post , isActive, handleCommentClick,  }: any) {
     const user = post.users;
     const audioRef = useRef<HTMLAudioElement>(null);
     const { user: currentUser } = useUser();
     const [isLiked, setIsLiked] = useState(false);
-const [likesCount, setLikesCount] = useState(post.likes.length);
+    const [likesCount, setLikesCount] = useState(post.likes.length);
+    
+    
 
 
 
 const [dbUser, setDbUser] = useState(null);
+
+
+
 
 useEffect(() => {
   if (!user) return;
@@ -57,7 +62,6 @@ const handleAudioPlay = () => {
     audioRef.current.pause();
   }
 }
-
 
 
 
@@ -139,8 +143,11 @@ const handleLike=async()=>{
                     </div>
 
                     <div className="flex flex-col items-center">
-                        <MessageCircle size={28} />
-                        <span className="text-sm">35</span>
+                        <MessageCircle size={28} onClick={() => {
+                            handleCommentClick();
+                            
+                        }} />
+                        <span className="text-sm">{post.comments_count}</span>
                     </div>
 
                     <div className="flex flex-col items-center">

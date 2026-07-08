@@ -6,14 +6,25 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useEffect,useState,useRef } from "react";
+import CommentPannel from "@/components/commentPannel"
 
 
 
 
 export default function Home(){
+    const [isOpen, setIsOpen] = useState(false);
     const [posts, setPosts] = useState([]);
     const [activeIndex, setActiveIndex] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [selectedPost, setSelectedPost] = useState(null);
+    const [commentsCount, setCommentsCount] = useState(0);
+
+
+    useEffect(() => {
+  if (posts.length > 0) {
+    setSelectedPost(posts[activeIndex]);
+  }
+}, [activeIndex, posts]);
 
 const handleScroll = () => {
   const container = containerRef.current;
@@ -37,6 +48,10 @@ const handleScroll = () => {
   fetchPosts()
 }, [])
 
+const handleCommentClick = () => {
+    setIsOpen(!isOpen);
+}
+
 
 
 
@@ -54,12 +69,13 @@ const handleScroll = () => {
                         key={post.id}
                         className="h-screen snap-start flex items-center py-4"
                     >
-                        <Feed post={post}  isActive={activeIndex === index} />
+                        <Feed post={post}  isActive={activeIndex === index} handleCommentClick={handleCommentClick} setSelectedPost={setSelectedPost}  />
                     </div>
                                 ))
             }
                 
             </div>
+            <CommentPannel isOpen={isOpen} setIsOpen={setIsOpen} selectedPost={selectedPost} setCommentsCount={setCommentsCount} setPost={setPosts} />
 
             <div className="absolute right-0 top-0 h-screen  flex flex-col items-center justify-center w-40 gap-14">
                 <div>
