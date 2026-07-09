@@ -9,16 +9,16 @@ export default function (){
             </Button>
             <div className="w-full    flex flex-col gap-10 p-2">
                 <Button className="w-full  ">
-                    Home
-                </Button>
-                <Button className="w-full  ">
                     Search
                 </Button>
                 <Button className="w-full  ">
-                    Create
+                    Upload
                 </Button>
                 <Button className="w-full  ">
                     Profile
+                </Button>
+                <Button className="w-full  ">
+                    Setting
                 </Button>
                 
             </div>
