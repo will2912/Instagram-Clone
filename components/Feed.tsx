@@ -13,6 +13,8 @@ export default function Feed({ post , isActive, handleCommentClick,  }: any) {
     const { user: currentUser } = useUser();
     const [isLiked, setIsLiked] = useState(false);
     const [likesCount, setLikesCount] = useState(post.likes.length);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const [isMuted, setIsMuted] = useState(true);
     
     
 
@@ -52,6 +54,18 @@ useEffect(() => {
   }
 }, [isActive]);
 
+useEffect(() => {
+  const video = videoRef.current;
+  if (!video) return;
+
+  if (isActive) {
+    video.play().catch(() => {});
+  } else {
+    video.pause();
+    video.currentTime = 0;
+  }
+}, [isActive]);
+
 const handleAudioPlay = () => {
     console.log("handleAudioPlay called");
     if (!audioRef.current) return;
@@ -81,12 +95,41 @@ const handleLike=async()=>{
     setIsLiked(!isLiked);
     
 }
+
+const handleVideoClick = ()=>{
+    setIsMuted((prev) => !prev);
+    // const video = videoRef.current;
+    // if (!video) return;
+    // setIsMuted(!isMuted);
+    // if (video.paused) {
+    //     video.play().catch(() => {});
+    // } else {
+    //     video.pause();
+    // }
+}
     
     return(
         <div className="relative w-full h-full rounded-[20px] overflow-hidden">
             {/* content */}
             <div className="w-full  h-full">
-                <img src={post.post_url} alt="Profile" className="w-full h-full object-cover" />
+                {post.file_type?.startsWith("image") ? (
+    <img
+      src={post.post_url}
+      alt="Post"
+      className="w-full h-full object-contain"
+    />
+  ) : (
+    <video
+        onClick={handleVideoClick}
+      ref={videoRef}
+      src={post.post_url}
+      className="w-full h-full object-contain"
+      
+      muted={isMuted}
+      loop
+      playsInline
+    />
+  )}
             </div>
             {/* caption */}
             <div className="absolute bottom-0 left-0 p-3 space-y-1 w-full">
