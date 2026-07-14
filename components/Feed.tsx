@@ -98,109 +98,156 @@ const handleLike=async()=>{
 
 const handleVideoClick = ()=>{
     setIsMuted((prev) => !prev);
-    // const video = videoRef.current;
-    // if (!video) return;
-    // setIsMuted(!isMuted);
-    // if (video.paused) {
-    //     video.play().catch(() => {});
-    // } else {
-    //     video.pause();
-    // }
+    
 }
     
-    return(
-        <div className="relative w-full h-full rounded-[20px] overflow-hidden">
-            {/* content */}
-            <div className="w-full  h-full">
-                {post.file_type?.startsWith("image") ? (
-    <img
-      src={post.post_url}
-      alt="Post"
-      className="w-full h-full object-contain"
-    />
-  ) : (
-    <video
-        onClick={handleVideoClick}
-      ref={videoRef}
-      src={post.post_url}
-      className="w-full h-full object-contain"
-      
-      muted={isMuted}
-      loop
-      playsInline
-    />
-  )}
-            </div>
-            {/* caption */}
-            <div className="absolute bottom-0 left-0 p-3 space-y-1 w-full">
-                <div className="font-semibold flex items-center gap-2">
-                    
-                    <img
-                        src={user?.avatar_url || "/default-avatar.png"}
-                        alt={user?.username || "User"}
-                        className="h-10 w-10 rounded-full border border-white/40 object-cover"
-                    />
-                    <p>{post.users?.username}</p>
-                </div>
+    return (
+  <div className="relative h-full w-full overflow-hidden rounded-[20px] bg-black text-white">
+    {/* CONTENT */}
+    <div className="h-full w-full">
+      {post.file_type?.startsWith("image") ? (
+        <img
+          src={post.post_url}
+          alt="Post"
+          className="h-full w-full object-contain"
+        />
+      ) : (
+        <video
+          onClick={handleVideoClick}
+          ref={videoRef}
+          src={post.post_url}
+          className="h-full w-full cursor-pointer object-contain"
+          muted={isMuted}
+          loop
+          playsInline
+        />
+      )}
+    </div>
 
-                <div className="text-sm">
-                    {post.caption}
-                </div>
+    {/* BOTTOM DARK GRADIENT */}
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
-                <div className="mt-3 w-full flex justify-between items-center gap-2 text-xs text-white/85 ">
-                    
-                    <p className="truncate">
-                        <span>♪  </span>
-                        {post.music_title
-                        ? `${post.music_artist} - ${post.music_title}`
-                        : "Original audio"}
-                    </p>
-                    <div className="relative h-12 w-12 rounded-full border border-white/30 bg-black/60 " onClick={handleAudioPlay}>
-                        <div className="h-full w-full  overflow-hidden rounded-full">
-                            <img 
-                                src={post.music_cover_url|| user?.avatar_url || "/default-avatar.png"}
-                                alt="music disc"
-                                className="h-full w-full object-cover"
-                            />
-                            {post.music_audio_url && (
-                                <audio ref={audioRef} src={post.music_audio_url} loop />
-                            )}
-                            
-                        </div> 
-                        
-                    </div>
-                </div>
-            </div>
-            {/* actions */}
+    {/* CAPTION AND USER INFORMATION */}
+    <div className="absolute bottom-4 left-4 right-4 z-10 space-y-3 ">
+      <div className="flex items-center gap-2 font-semibold">
+        <img
+          src={user?.avatar_url || "/default-avatar.png"}
+          alt={user?.username || "User"}
+          className="h-10 w-10 rounded-full border border-white/40 object-cover"
+        />
 
-            
-            <div className="absolute top-80 right-0 p-2">
-                <div className="flex flex-col gap-6">
-                    <div className="flex flex-col items-center">
-                        <Heart size={28} onClick={handleLike} className={
-                            isLiked
-                                ? "fill-red-500 text-red-500"
-                                : ""
-                            }/>
-                        <span className="text-sm">{likesCount}</span>
-                    </div>
+        <p className="truncate">
+          {user?.username || "Unknown user"}
+        </p>
 
-                    <div className="flex flex-col items-center">
-                        <MessageCircle size={28} onClick={() => {
-                            handleCommentClick();
-                            
-                        }} />
-                        <span className="text-sm">{post.comments_count}</span>
-                    </div>
+        <button className="rounded-lg border border-white/70 px-3 py-1 text-xs">
+          Follow
+        </button>
+      </div>
 
-                    <div className="flex flex-col items-center">
-                        <Share size={28} />
-                        <span className="text-sm">Share</span>
-                    </div>
-                    
-                </div>
-            </div>
-            
+      {post.caption && (
+        <div className="line-clamp-2 text-sm">
+          {post.caption}
         </div>
-    )
+      )}
+
+      {/* MUSIC */}
+      <div className="flex w-full items-center justify-between gap-2 text-xs text-white/85 ">
+        <div className="min-w-0 rounded-full bg-black/30 px-3 py-2 backdrop-blur-sm">
+          <p className="truncate">
+            <span>♪ </span>
+
+            {post.music_title
+              ? `${post.music_artist} - ${post.music_title}`
+              : "Original audio"}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleAudioPlay}
+          className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full border border-white/40 bg-black/60 transition active:scale-90"
+        >
+          <img
+            src={
+              post.music_cover_url ||
+              user?.avatar_url ||
+              "/default-avatar.png"
+            }
+            alt="Music disc"
+            className="h-full w-full object-cover"
+          />
+
+          {post.music_audio_url && (
+            <audio
+              ref={audioRef}
+              src={post.music_audio_url}
+              loop
+            />
+          )}
+        </button>
+      </div>
+    </div>
+
+    {/* ACTIONS */}
+    <div className="absolute bottom-24 right-3 z-20 p-2">
+      <div className="flex flex-col gap-5">
+        {/* LIKE */}
+        <div className="flex flex-col items-center">
+          <button
+            type="button"
+            onClick={handleLike}
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-black/30 transition hover:bg-black/50 active:scale-90"
+          >
+            <Heart
+              size={28}
+              className={
+                isLiked
+                  ? "fill-red-500 text-red-500"
+                  : "text-white"
+              }
+            />
+          </button>
+
+          <span className="text-sm">{likesCount}</span>
+        </div>
+
+        {/* COMMENT */}
+        <div className="flex flex-col items-center">
+          <button
+            type="button"
+            onClick={handleCommentClick}
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-black/30 transition hover:bg-black/50 active:scale-90"
+          >
+            <MessageCircle size={28} />
+          </button>
+
+          <span className="text-sm">
+            {post.comments_count || 0}
+          </span>
+        </div>
+
+        {/* SHARE */}
+        <div className="flex flex-col items-center">
+          <button
+            type="button"
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-black/30 transition hover:bg-black/50 active:scale-90"
+          >
+            <Share size={28} />
+          </button>
+
+          <span className="text-sm">Share</span>
+        </div>
+
+        {/* SAVE */}
+        <button
+          type="button"
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-black/30 transition hover:bg-black/50 active:scale-90"
+        >
+          <Bookmark size={28} />
+        </button>
+      </div>
+    </div>
+  </div>
+);
 }
