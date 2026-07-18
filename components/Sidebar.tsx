@@ -1,31 +1,110 @@
 import { Button } from "@base-ui/react";
 import AuthSidebar from "./authSidebar";
+import Link from "next/link";
 
-export default function (){
-    return (
-        <div className="w-64 h-screen bg-gray-800 text-white flex flex-col gap-5">
-            <Button  className="w-full  h-22 bg-pink-500 hover:bg-blue-600 ">
-                Instagram
-            </Button>
-            <div className="w-full    flex flex-col gap-10 p-2">
-                <Button className="w-full  ">
-                    Search
-                </Button>
-                <Button className="w-full  ">
-                    Upload
-                </Button>
-                <Button className="w-full  ">
-                    Profile
-                </Button>
-                <Button className="w-full  ">
-                    Setting
-                </Button>
-                
-            </div>
-            <div className="w-full  mt-auto ">
-                <AuthSidebar />
-            </div>
+export default function Sidebar() {
+  return (
+    <aside className="flex h-screen w-64 flex-col border-r border-white/10 bg-neutral-950 text-white">
+      {/* LOGO */}
+      <div className="px-6 py-8">
+        <Button
+          className="
+            flex h-14 w-full items-center justify-start
+            rounded-xl
+            px-4
+            text-2xl
+            font-bold
+            tracking-tight
+            transition
+            hover:bg-white/10
+          "
+        >
+          <Link href="/">Instagram</Link>
+        </Button>
+      </div>
 
-        </div>
-    )
+      {/* NAVIGATION */}
+      <nav className="flex flex-1 flex-col gap-2 px-4">
+        <Link href="/search" className="w-full" >
+        <Button
+          className="
+          w-full
+          
+            flex h-14 items-center justify-start
+            rounded-xl
+            px-4
+            text-base
+            font-medium
+            transition-all
+            hover:bg-white/10
+            active:scale-[0.98]
+          "
+        >
+          Search
+        </Button>
+        </Link>
+
+    
+        <Link href="/upload" className="w-full" >
+        <Button
+          className="
+          w-full
+            flex h-14 items-center justify-start
+            rounded-xl
+            px-4
+            text-base
+            font-medium
+            transition-all
+            hover:bg-white/10
+            active:scale-[0.98]
+          "
+        >
+          upload
+        </Button>
+        </Link>
+
+        <Link href="/profile" className="w-full" >
+        <Button
+          className="
+          w-full
+            flex h-14 items-center justify-start
+            rounded-xl
+            px-4
+            text-base
+            font-medium
+            transition-all
+            hover:bg-white/10
+            active:scale-[0.98]
+          "
+        >
+          Profile
+        </Button>
+        </Link>
+
+
+        <Link href="/settings" className="w-full">
+        <Button
+          className="
+            w-full
+            flex h-14 items-center justify-start
+            rounded-xl
+            px-4
+            text-base
+            font-medium
+            transition-all
+            hover:bg-white/10
+            active:scale-[0.98]
+          "
+        >
+          Settings
+        </Button>
+        </Link>
+      </nav>
+
+      {/* USER */}
+      <div className="border-t border-white/10 p-4">
+        <AuthSidebar />
+      </div>
+    </aside>
+  );
 }

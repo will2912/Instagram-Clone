@@ -21,7 +21,7 @@ export default function RatingSlider({
     initialRating
   );
   const [previewRating, setPreviewRating] = useState(
-    initialRating || 5
+    initialRating ?? 5
   );
 
   function calculateRating(clientY: number) {
@@ -47,15 +47,16 @@ export default function RatingSlider({
   }
 
   function handlePointerDown(
-    event: React.PointerEvent<HTMLButtonElement>
-  ) {
-    event.preventDefault();
+  event: React.PointerEvent<HTMLButtonElement>
+) {
+  event.preventDefault();
 
-    setIsOpen(true);
+  setPreviewRating(selectedRating ?? 5);
+  setIsOpen(true);
 
-    // Keep receiving pointer events even when pointer leaves the button
-    event.currentTarget.setPointerCapture(event.pointerId);
-  }
+  event.currentTarget.setPointerCapture(event.pointerId);
+}
+
 
   function handlePointerMove(
     event: React.PointerEvent<HTMLButtonElement>
@@ -176,35 +177,51 @@ export default function RatingSlider({
 
       {/* MAIN RATING BUTTON */}
       <button
-        type="button"
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={() => setIsOpen(false)}
-        className={`
-          flex h-11 w-11 touch-none items-center justify-center
-          rounded-full border transition active:scale-90
-          ${
-            selectedRating
-              ? "border-orange-300 bg-gradient-to-br from-pink-500 to-orange-400"
-              : "border-white/30 bg-black/30 hover:bg-black/50"
-          }
-        `}
-        aria-label="Rate this post"
-      >
-        {selectedRating ? (
-          <span className="text-sm font-bold text-white">
-            {selectedRating}
-          </span>
-        ) : (
-          <Star size={27} className="text-white" />
-        )}
-      </button>
+  type="button"
+  onPointerDown={handlePointerDown}
+  onPointerMove={handlePointerMove}
+  onPointerUp={handlePointerUp}
+  onPointerCancel={() => setIsOpen(false)}
+  className={`
+    relative flex h-11 w-11 touch-none items-center justify-center
+    rounded-full border transition active:scale-90
+    ${
+      selectedRating !== null
+        ? "border-orange-300/80 bg-black/40 shadow-[0_0_12px_rgba(249,115,22,0.45)]"
+        : "border-white/30 bg-black/30 hover:bg-black/50"
+    }
+  `}
+  aria-label="Rate this post"
+>
+  <Star
+    size={27}
+    className={
+      selectedRating !== null
+        ? "fill-orange-400 text-orange-400"
+        : "text-white"
+    }
+  />
+
+  {selectedRating !== null && (
+    <span
+      className="
+        absolute -right-1 -top-1
+        flex h-5 min-w-5 items-center justify-center
+        rounded-full
+        bg-gradient-to-br from-pink-500 to-orange-400
+        px-1 text-[10px] font-bold text-white
+        ring-2 ring-black
+      "
+    >
+      {selectedRating}
+    </span>
+  )}
+</button>
 
       {/* SCORE UNDER BUTTON */}
       <span className="mt-1 text-xs font-medium text-white">
-        {selectedRating ?? averageRating.toFixed(1)}
-      </span>
+  {averageRating.toFixed(1)}
+</span>
     </div>
   );
 }
