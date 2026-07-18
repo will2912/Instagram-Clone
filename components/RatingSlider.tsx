@@ -93,30 +93,52 @@ export default function RatingSlider({
   <div
     ref={sliderRef}
     className="
-absolute
-left-1/2
-top-1/2
-z-50
-flex
-h-72
-w-8             // was w-16
--translate-x-1/2
--translate-y-[48%]
-flex-col
-items-center
-justify-between
-rounded-full
-border-4         // thicker border
-border-white/70
-bg-transparent
-px-2    // remove black background
-py-2
-backdrop-blur-sm  // optional
-"
+      absolute
+      left-1/2
+      top-1/2
+      z-50
+      flex
+      h-72
+      w-12
+      -translate-x-1/2
+      -translate-y-[48%]
+      flex-col
+      items-center
+      justify-between
+      overflow-hidden
+      rounded-full
+      border-[3px]
+      border-white/70
+      bg-transparent
+      py-2
+      shadow-2xl
+      backdrop-blur-[2px]
+    "
   >
+    {/* COLORED FILL */}
+    <div
+      className="
+        pointer-events-none
+        absolute
+        inset-x-0
+        bottom-0
+        bg-gradient-to-t
+        from-pink-600
+        via-red-500
+        to-orange-400
+        transition-all
+        duration-100
+      "
+      style={{
+        height: `${previewRating * 10}%`,
+      }}
+    />
+
+    {/* NUMBERS */}
     {Array.from({ length: 10 }, (_, index) => {
       const rating = 10 - index;
       const isActive = previewRating === rating;
+      const isFilled = rating <= previewRating;
 
       return (
         <button
@@ -124,12 +146,24 @@ backdrop-blur-sm  // optional
           type="button"
           onClick={() => handleNumberClick(rating)}
           className={`
-            flex h-7 w-10 items-center justify-center
-            rounded-full text-sm font-semibold transition
+            relative
+            z-10
+            flex
+            h-6
+            w-8
+            items-center
+            justify-center
+            rounded-full
+            text-xs
+            font-bold
+            transition-all
+            duration-100
             ${
               isActive
-                ? "scale-110 bg-gradient-to-r from-pink-500 to-orange-400 text-white shadow-lg"
-                : "text-white/70 hover:bg-white/10 hover:text-white"
+                ? "scale-125 bg-white text-black shadow-lg"
+                : isFilled
+                  ? "text-white"
+                  : "text-white/70"
             }
           `}
         >
