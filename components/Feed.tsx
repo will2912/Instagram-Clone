@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import RatingSlider from "./RatingSlider";
 
 export default function Feed({ post , isActive, handleCommentClick,  }: any) {
     const user = post.users;
@@ -191,7 +192,13 @@ const handleVideoClick = ()=>{
 
     {/* ACTIONS */}
     <div className="absolute bottom-24 right-3 z-20 p-2">
-      <div className="flex flex-col gap-5">
+      <div className="relative flex flex-col gap-5">
+            <RatingSlider
+      averageRating={8.4}
+      onRatingChange={(rating) => {
+        console.log("Selected rating:", rating);
+      }}
+    />
         {/* LIKE */}
         <div className="flex flex-col items-center">
           <button
