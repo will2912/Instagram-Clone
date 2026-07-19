@@ -1,7 +1,7 @@
 "use client";
 
 import { Star } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 type RatingSliderProps = {
   initialRating?: number | null;
@@ -10,8 +10,8 @@ type RatingSliderProps = {
 };
 
 export default function RatingSlider({
-  initialRating = null,
-  averageRating = 0,
+  initialRating,
+  averageRating ,
   onRatingChange,
 }: RatingSliderProps) {
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -86,6 +86,11 @@ export default function RatingSlider({
 
     onRatingChange?.(rating);
   }
+
+  useEffect(() => {
+  setSelectedRating(initialRating);
+  setPreviewRating(initialRating ?? 5);
+}, [initialRating]);
 
   return (
     <div className="relative flex flex-col items-center">

@@ -13,9 +13,13 @@ export async function GET() {
       id,
       user_id
     ),
-  comments (
-    id
-  )
+    ratings (
+      user_id,
+      rating
+    ),
+    comments (
+      id
+    )
   `);
 
   if (error) {

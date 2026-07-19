@@ -14,6 +14,7 @@ export default function Feed({ post , isActive, handleCommentClick,  }: any) {
     const { user: currentUser } = useUser();
     const [isLiked, setIsLiked] = useState(false);
     const [likesCount, setLikesCount] = useState(post.likes.length);
+    
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isMuted, setIsMuted] = useState(true);
     
@@ -24,6 +25,15 @@ export default function Feed({ post , isActive, handleCommentClick,  }: any) {
 const [dbUser, setDbUser] = useState(null);
 
 
+const myRating = post.ratings.find(
+  (r) => r.user_id === dbUser?.id
+)?.rating ?? null;
+
+const averageRating =
+  post.ratings.length === 0
+    ? 0
+    : post.ratings.reduce((sum, r) => sum + r.rating, 0) /
+      post.ratings.length;
 
 
 useEffect(() => {
@@ -101,6 +111,34 @@ const handleVideoClick = ()=>{
     setIsMuted((prev) => !prev);
     
 }
+
+const handleRating = async (rating: number) => {
+  if (!dbUser?.id) return;
+
+  try {
+    const response = await fetch("/api/rating", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        post_id: post.id,
+        user_id: dbUser.id,
+        rating,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Failed to save rating");
+    }
+
+    console.log("Rating saved:", data);
+  } catch (error) {
+    console.error("Rating error:", error);
+  }
+};
     
     return (
   <div className="relative h-full w-full overflow-hidden rounded-[20px] bg-black text-white">
@@ -194,10 +232,9 @@ const handleVideoClick = ()=>{
     <div className="absolute bottom-24 right-3 z-20 p-2">
       <div className="relative flex flex-col gap-5">
             <RatingSlider
-      averageRating={8.4}
-      onRatingChange={(rating) => {
-        console.log("Selected rating:", rating);
-      }}
+      initialRating={myRating}
+  averageRating={averageRating}
+      onRatingChange={handleRating}
     />
         {/* LIKE */}
         <div className="flex flex-col items-center">
