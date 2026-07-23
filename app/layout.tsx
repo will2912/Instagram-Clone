@@ -15,9 +15,9 @@ export default function Rootlayout({children}: {children: React.ReactNode}) {
 
                 
                     <Sidebar />
-                    <div className="flex-1 overflow-hidden">
-                        {children}
-                    </div>
+                    <div className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden">
+  {children}
+</div>
                 </div>
             </body>
         </html>
