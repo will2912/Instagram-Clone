@@ -8,7 +8,7 @@ export default function AuthSidebar() {
     const {user,error, isLoading}=useUser()
     useEffect(()=>{
         if(!user) return
-        fetch("api/me")
+        fetch("/api/me")
     }, [user])
     if(isLoading) return <div>Loading...</div>
     

@@ -57,7 +57,10 @@ const handleCommentClick = () => {
 
 
     return (
-        <div className="relative flex justify-center w-full h-screen ">
+        <div className="relative flex justify-center bg-[#060812] w-full h-screen ">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[450px] bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-violet-600/15 rounded-full blur-3xl pointer-events-none" />
+
             <div 
             ref={containerRef}
             onScroll={handleScroll}
